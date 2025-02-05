@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.jacksoncuevas.todoapp.R
 import com.jacksoncuevas.todoapp.domain.Task
 import com.jacksoncuevas.todoapp.presentation.home.providers.HomeScreenPreviewProvider
+import com.jacksoncuevas.todoapp.presentation.home.providers.completedTask
 import com.jacksoncuevas.todoapp.ui.theme.AppTheme
 
 
@@ -115,7 +116,10 @@ fun HomeScreen(
             item {
                 SummaryInfo(
                     date = state.date,
-                    taskSummary = state.summary
+                    taskSummary = state.summary,
+                    completedTask = 5,
+                    totalTask = 10
+
                 )
             }
 
@@ -172,6 +176,8 @@ fun HomeScreen(
                 )
 
             }
+
+
         }
     }
 }
