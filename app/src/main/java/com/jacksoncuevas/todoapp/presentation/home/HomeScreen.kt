@@ -2,7 +2,7 @@
 
 package com.jacksoncuevas.todoapp.presentation.home
 
-import android.graphics.drawable.Icon
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,29 +25,59 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.jacksoncuevas.todoapp.R
-import com.jacksoncuevas.todoapp.domain.Task
 import com.jacksoncuevas.todoapp.presentation.home.providers.HomeScreenPreviewProvider
-import com.jacksoncuevas.todoapp.presentation.home.providers.completedTask
 import com.jacksoncuevas.todoapp.ui.theme.AppTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+@Composable
+fun HomeScreenRoot() {
+    val viewModel = viewModel<HomeScreenViewModel>()
+    val state = viewModel.state
+    val event = viewModel.event
+
+    val context = LocalContext.current
+
+    LaunchedEffect(true) {
+        event.collect { event ->
+            when(event) {
+                HomeScreenEvent.DeletedAllTasks -> {
+                    Toast.makeText(context, context.getString(R.string.all_tasks_deleted), Toast.LENGTH_SHORT)
+                }
+                HomeScreenEvent.DeletedTask -> {
+                    Toast.makeText(context, context.getString(R.string.task_deleted), Toast.LENGTH_SHORT)
+
+                }
+                HomeScreenEvent.UpdatedTasks -> TODO()
+            }
+        }
+    }
+    HomeScreen(
+        state = state,
+        onAction = viewModel::onAction
+    )
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    state: HomeDataState
+    state: HomeDataState,
+    onAction: (HomeScreenAction) -> Unit
 ) {
     var isMenuExpanded by remember { mutableStateOf(false) }
 
@@ -81,6 +111,7 @@ fun HomeScreen(
                         ) {
                             DropdownMenuItem(
                                 onClick = {
+                                    onAction(HomeScreenAction.OnDeleteAllTasks)
                                     isMenuExpanded = false
                                 },
                                 text = {
@@ -109,7 +140,8 @@ fun HomeScreen(
 
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier
+                .padding(paddingValues)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
@@ -117,9 +149,8 @@ fun HomeScreen(
                 SummaryInfo(
                     date = state.date,
                     taskSummary = state.summary,
-                    completedTask = 5,
-                    totalTask = 10
-
+                    completedTask = state.completedTask.size,
+                    totalTask = state.completedTask.size + state.pendingTask.size
                 )
             }
 
@@ -144,8 +175,12 @@ fun HomeScreen(
                     ),
                     task = task,
                     onClickItem = {},
-                    onDeleteItem = {},
-                    onToggleCompletion = {}
+                    onDeleteItem = {
+                        onAction(HomeScreenAction.OnDeleteTask(task))
+                    },
+                    onToggleCompletion = {
+                        onAction(HomeScreenAction.OnDeleteTask(task))
+                    }
                 )
 
             }
@@ -171,8 +206,12 @@ fun HomeScreen(
                     ),
                     task = task,
                     onClickItem = {},
-                    onDeleteItem = {},
-                    onToggleCompletion = {}
+                    onDeleteItem = {
+                        onAction(HomeScreenAction.OnDeleteTask(task))
+                    },
+                    onToggleCompletion = {
+                        onAction(HomeScreenAction.OnToggleTask(task))
+                    }
                 )
 
             }
@@ -193,8 +232,10 @@ fun HomeScreenPreviewLight(
                 date = state.date,
                 summary = state.summary,
                 completedTask = state.completedTask,
-                pendingTask = state.pendingTask
-            )
+                pendingTask = state.pendingTask,
+
+                ),
+            onAction = {}
         )
     }
 }
@@ -214,14 +255,8 @@ fun HomeScreenPreviewDark(
                 summary = state.summary,
                 completedTask = state.completedTask,
                 pendingTask = state.pendingTask
-            )
+            ),
+            onAction = {}
         )
     }
 }
-
-data class HomeDataState(
-    val date: String,
-    val summary: String,
-    val completedTask: List<Task>,
-    val pendingTask: List<Task>,
-)

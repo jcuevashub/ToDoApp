@@ -2,12 +2,19 @@ package com.jacksoncuevas.todoapp.data
 
 import com.jacksoncuevas.todoapp.domain.Task
 import com.jacksoncuevas.todoapp.domain.TaskLocalDataSource
+import com.jacksoncuevas.todoapp.presentation.home.providers.completedTask
+import com.jacksoncuevas.todoapp.presentation.home.providers.pendingTask
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 object FakeTaskLocalDataSource: TaskLocalDataSource {
     private val _taskFlow = MutableStateFlow<List<Task>>(emptyList())
+
+    init {
+        _taskFlow.value = completedTask + pendingTask
+    }
+
     override val taskFlow: Flow<List<Task>>
         get() = _taskFlow
 
