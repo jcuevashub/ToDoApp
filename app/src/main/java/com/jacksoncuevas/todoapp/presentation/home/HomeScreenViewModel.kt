@@ -1,5 +1,7 @@
 package com.jacksoncuevas.todoapp.presentation.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,7 +13,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 class HomeScreenViewModel : ViewModel() {
     private val taskLocalDataSource = FakeTaskLocalDataSource
 
@@ -24,14 +29,18 @@ class HomeScreenViewModel : ViewModel() {
     val event = eventChannel.receiveAsFlow()
 
     init {
+        state = state.copy(
+            date = LocalDate.now().let {
+                DateTimeFormatter.ofPattern("EEEE, MMMM dd yyyy").format(it)
+            }
+        )
         taskLocalDataSource.taskFlow
             .onEach {
                 val completedTask = it.filter { task -> task.isCompleted }
                 val pendingTask = it.filter { task -> !task.isCompleted }
 
                 state = state.copy(
-                    date = "March 9, 2024",
-                    summary = "${pendingTask.size} incomplete, ${completedTask.size} completed",
+                    summary = pendingTask.size.toString(),
                     completedTask = completedTask,
                     pendingTask = pendingTask
                 )
