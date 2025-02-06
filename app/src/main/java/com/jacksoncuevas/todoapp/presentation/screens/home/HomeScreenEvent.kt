@@ -1,4 +1,4 @@
-package com.jacksoncuevas.todoapp.presentation.home
+package com.jacksoncuevas.todoapp.presentation.screens.home
 
 sealed class HomeScreenEvent {
     data object UpdatedTasks : HomeScreenEvent()

@@ -2,8 +2,8 @@ package com.jacksoncuevas.todoapp.data
 
 import com.jacksoncuevas.todoapp.domain.Task
 import com.jacksoncuevas.todoapp.domain.TaskLocalDataSource
-import com.jacksoncuevas.todoapp.presentation.home.providers.completedTask
-import com.jacksoncuevas.todoapp.presentation.home.providers.pendingTask
+import com.jacksoncuevas.todoapp.presentation.screens.home.providers.completedTask
+import com.jacksoncuevas.todoapp.presentation.screens.home.providers.pendingTask
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

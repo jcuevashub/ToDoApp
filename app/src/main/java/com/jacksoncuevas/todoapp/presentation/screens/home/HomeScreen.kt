@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.jacksoncuevas.todoapp.presentation.home
+package com.jacksoncuevas.todoapp.presentation.screens.home
 
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -38,7 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.jacksoncuevas.todoapp.presentation.home.providers.HomeScreenPreviewProvider
+import com.jacksoncuevas.todoapp.presentation.screens.home.providers.HomeScreenPreviewProvider
 import com.jacksoncuevas.todoapp.ui.theme.AppTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jacksoncuevas.todoapp.R

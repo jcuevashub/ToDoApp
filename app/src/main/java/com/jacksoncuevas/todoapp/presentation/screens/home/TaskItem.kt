@@ -1,4 +1,4 @@
-package com.jacksoncuevas.todoapp.presentation.home
+package com.jacksoncuevas.todoapp.presentation.screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

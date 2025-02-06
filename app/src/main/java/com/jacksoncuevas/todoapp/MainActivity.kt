@@ -19,9 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.jacksoncuevas.todoapp.data.FakeTaskLocalDataSource
 import com.jacksoncuevas.todoapp.domain.Task
-import com.jacksoncuevas.todoapp.presentation.home.HomeDataState
-import com.jacksoncuevas.todoapp.presentation.home.HomeScreen
-import com.jacksoncuevas.todoapp.presentation.home.HomeScreenRoot
+import com.jacksoncuevas.todoapp.presentation.screens.home.HomeDataState
+import com.jacksoncuevas.todoapp.presentation.screens.home.HomeScreen
+import com.jacksoncuevas.todoapp.presentation.screens.home.HomeScreenRoot
 import com.jacksoncuevas.todoapp.ui.theme.AppTheme
 import java.util.UUID
 

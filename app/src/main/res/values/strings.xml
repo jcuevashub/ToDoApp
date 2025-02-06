@@ -6,4 +6,11 @@
     <string name="all_tasks_deleted">All tasks deleted</string>
     <string name="task_deleted">Task deleted</string>
     <string name="summary_info">You have %s pending tasks</string>
+    <string name="title_activity_task_screen">TaskScreen</string>
+    <string name="task">Task</string>
+    <string name="done">Done</string>
+    <string name="category">Category</string>
+    <string name="task_name">Task name</string>
+    <string name="task_description">Task description</string>
+    <string name="save">Save</string>
 </resources>
