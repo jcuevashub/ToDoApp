@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.jacksoncuevas.todoapp.data.FakeTaskLocalDataSource
 import com.jacksoncuevas.todoapp.domain.Task
+import com.jacksoncuevas.todoapp.presentation.screens.detail.TaskScreenRoot
 import com.jacksoncuevas.todoapp.presentation.screens.home.HomeDataState
 import com.jacksoncuevas.todoapp.presentation.screens.home.HomeScreen
 import com.jacksoncuevas.todoapp.presentation.screens.home.HomeScreenRoot
@@ -31,24 +32,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-             HomeScreenRoot()
+             TaskScreenRoot()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AppTheme {
-        Greeting("Android")
     }
 }
