@@ -64,7 +64,7 @@ fun TaskItem(
                 style = MaterialTheme.typography.titleSmall.copy(
                     textDecoration = if (task.isCompleted) TextDecoration.LineThrough else TextDecoration.None
                 ),
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             if (!task.isCompleted) {
@@ -74,7 +74,7 @@ fun TaskItem(
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.secondary
                     )
                 }
 
@@ -82,7 +82,7 @@ fun TaskItem(
                     Text(
                         text = it.toString(),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.secondary
                     )
                 }
 

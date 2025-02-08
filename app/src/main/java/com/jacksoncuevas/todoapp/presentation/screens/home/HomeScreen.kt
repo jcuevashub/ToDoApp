@@ -2,7 +2,9 @@
 
 package com.jacksoncuevas.todoapp.presentation.screens.home
 
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -43,8 +46,9 @@ import com.jacksoncuevas.todoapp.ui.theme.AppTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jacksoncuevas.todoapp.R
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreenRoot() {
+fun HomeScreenRoot(navigateToTaskScreen: () -> Unit) {
     val viewModel = viewModel<HomeScreenViewModel>()
     val state = viewModel.state
     val event = viewModel.event
@@ -67,7 +71,14 @@ fun HomeScreenRoot() {
     }
     HomeScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = { action ->
+            when(action) {
+                HomeScreenAction.OnAddTask ->  {
+                    navigateToTaskScreen()
+                }
+                else -> viewModel.onAction(action)
+            }
+        }
     )
 }
 
@@ -127,10 +138,12 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {},
+                onClick = {
+                    onAction(HomeScreenAction.OnAddTask)
+                },
                 content = {
                     Icon(
-                        imageVector = Icons.Default.MoreVert,
+                        imageVector = Icons.Default.Add,
                         contentDescription = "Add Task",
                         tint = MaterialTheme.colorScheme.onSurface
                     )
