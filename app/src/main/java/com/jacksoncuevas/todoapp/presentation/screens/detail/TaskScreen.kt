@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jacksoncuevas.todoapp.R
 import com.jacksoncuevas.todoapp.domain.Category
+import com.jacksoncuevas.todoapp.presentation.screens.detail.providers.TaskScreenStatePreviewProvider
 import com.jacksoncuevas.todoapp.ui.theme.AppTheme
 
 @Composable
@@ -83,8 +84,6 @@ fun TaskScreenRoot(navigateBack: () -> Boolean) {
         }
     )
 }
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -132,6 +131,9 @@ fun TaskScreen(
             ) {
                 Text(
                     text = stringResource(R.string.done),
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = MaterialTheme.colorScheme.onSurface
+                    ),
                     modifier = Modifier.padding(8.dp)
                 )
                 Checkbox(checked = state.isTaskDone,
@@ -185,9 +187,9 @@ fun TaskScreen(
 
                         ) {
                             Column {
-                                Category.entries.forEach { category: Category ->
+                                Category.entries.forEach { category ->
                                     Text(
-                                        text = category.toString(),
+                                        text = category.name,
                                         style = MaterialTheme.typography.bodyMedium.copy(
                                             color = MaterialTheme.colorScheme.onSurface
                                         ),
@@ -215,7 +217,7 @@ fun TaskScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
-                decorator = { innerBox ->
+                decorator = { innerTextField ->
                     Column(
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -232,7 +234,7 @@ fun TaskScreen(
                             )
                         }
                         else {
-                            innerBox()
+                            innerTextField()
                         }
                     }
                 }
@@ -243,11 +245,13 @@ fun TaskScreen(
                 textStyle = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onSurface
                 ),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
                     .onFocusChanged {
                         isDescriptionFocused = it.isFocused
                     },
-                decorator = { innerBox ->
+                decorator = { innerTextField ->
                     Column {
                         if (state.taskDescription.text.toString().isEmpty() && !isDescriptionFocused) {
                             Text(
@@ -258,7 +262,7 @@ fun TaskScreen(
                             )
                         }
                         else {
-                            innerBox()
+                            innerTextField()
                         }
                     }
                 }
@@ -269,6 +273,7 @@ fun TaskScreen(
             )
 
             Button(
+                enabled = state.canSaveTask,
                 onClick = {
                     onActionTask(
                         ActionTask.SaveTask
@@ -280,7 +285,10 @@ fun TaskScreen(
                 Text(
                     text = stringResource(R.string.save),
                     style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = if (state.canSaveTask)
+                            MaterialTheme.colorScheme.onPrimary
+                        else
+                            MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 )
             }

@@ -45,10 +45,13 @@ import com.jacksoncuevas.todoapp.presentation.screens.home.providers.HomeScreenP
 import com.jacksoncuevas.todoapp.ui.theme.AppTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jacksoncuevas.todoapp.R
+import com.jacksoncuevas.todoapp.presentation.screens.home.componets.SectionTitle
+import com.jacksoncuevas.todoapp.presentation.screens.home.componets.SummaryInfo
+import com.jacksoncuevas.todoapp.presentation.screens.home.componets.TaskItem
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreenRoot(navigateToTaskScreen: () -> Unit) {
+fun HomeScreenRoot(navigateToTaskScreen: (String?) -> Unit) {
     val viewModel = viewModel<HomeScreenViewModel>()
     val state = viewModel.state
     val event = viewModel.event
@@ -69,12 +72,16 @@ fun HomeScreenRoot(navigateToTaskScreen: () -> Unit) {
             }
         }
     }
+
     HomeScreen(
         state = state,
         onAction = { action ->
             when(action) {
-                HomeScreenAction.OnAddTask ->  {
-                    navigateToTaskScreen()
+                is HomeScreenAction.OnClickTask -> {
+                    navigateToTaskScreen(action.taskId)
+                }
+                is HomeScreenAction.OnAddTask ->  {
+                    navigateToTaskScreen(null)
                 }
                 else -> viewModel.onAction(action)
             }
@@ -187,7 +194,9 @@ fun HomeScreen(
                         )
                     ),
                     task = task,
-                    onClickItem = {},
+                    onClickItem = {
+                        onAction(HomeScreenAction.OnClickTask(task.id))
+                    },
                     onDeleteItem = {
                         onAction(HomeScreenAction.OnDeleteTask(task))
                     },
@@ -218,7 +227,9 @@ fun HomeScreen(
                         )
                     ),
                     task = task,
-                    onClickItem = {},
+                    onClickItem = {
+                        onAction(HomeScreenAction.OnClickTask(task.id))
+                    },
                     onDeleteItem = {
                         onAction(HomeScreenAction.OnDeleteTask(task))
                     },

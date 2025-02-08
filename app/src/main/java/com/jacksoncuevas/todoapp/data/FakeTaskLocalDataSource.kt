@@ -25,12 +25,12 @@ object FakeTaskLocalDataSource: TaskLocalDataSource {
         _taskFlow.value = tasks
     }
 
-    override suspend fun updateTask(task: Task) {
+    override suspend fun updateTask(updatedTask: Task) {
        val tasks = _taskFlow.value.toMutableList()
-        val taskIndex = tasks.indexOfLast { it.id == task.id }
+        val taskIndex = tasks.indexOfLast { it.id == updatedTask.id }
         if(taskIndex != -1) {
-            tasks[taskIndex] = task
-            delay(100)
+            tasks[taskIndex] = updatedTask
+            delay(1000L)
             _taskFlow.value = tasks
         }
     }
@@ -38,15 +38,22 @@ object FakeTaskLocalDataSource: TaskLocalDataSource {
     override suspend fun removeTask(task: Task) {
         val tasks = _taskFlow.value.toMutableList()
         tasks.remove(task)
-        delay(100)
+        delay(1000L)
         _taskFlow.value = tasks
     }
 
     override suspend fun deleteAllTasks() {
+        delay(1000L)
         _taskFlow.value = emptyList()
     }
 
     override suspend fun getTaskById(id: String): Task? {
+        delay(1000L)
       return _taskFlow.value.firstOrNull {it.id == id}
+    }
+
+    override suspend fun removeAllTasks() {
+        delay(1000L)
+        _taskFlow.value = emptyList()
     }
 }

@@ -1,8 +1,9 @@
-package com.jacksoncuevas.todoapp.presentation.screens.home
+package com.jacksoncuevas.todoapp.presentation.screens.home.componets
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.content.MediaType.Companion.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,7 +37,7 @@ fun TaskItem(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .clickable {
-                onDeleteItem(task.id)
+                onClickItem(task.id)
             }
             .background(
                 color = MaterialTheme.colorScheme.surface
@@ -103,6 +104,7 @@ fun TaskItem(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(
     showBackground = true,

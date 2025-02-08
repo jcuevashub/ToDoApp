@@ -1,4 +1,4 @@
-package com.jacksoncuevas.todoapp.presentation.screens.home
+package com.jacksoncuevas.todoapp.presentation.screens.home.componets
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween

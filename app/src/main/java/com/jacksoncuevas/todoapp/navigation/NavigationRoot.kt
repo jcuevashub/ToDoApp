@@ -13,7 +13,6 @@ import com.jacksoncuevas.todoapp.presentation.screens.detail.TaskScreenRoot
 import com.jacksoncuevas.todoapp.presentation.screens.home.HomeScreenRoot
 import kotlinx.serialization.Serializable
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationRoot(
     navController: NavHostController
@@ -27,8 +26,8 @@ fun NavigationRoot(
         ) {
             composable<HomeScreenDes> {
                 HomeScreenRoot(
-                    navigateToTaskScreen = {
-                        navController.navigate(TaskScreenDes)
+                    navigateToTaskScreen = { taskId ->
+                        navController.navigate(TaskScreenDes(taskId = taskId))
                     }
                 )
             }
@@ -48,4 +47,6 @@ fun NavigationRoot(
 object HomeScreenDes
 
 @Serializable
-object TaskScreenDes
+data class TaskScreenDes(
+    val taskId: String? = null
+)
