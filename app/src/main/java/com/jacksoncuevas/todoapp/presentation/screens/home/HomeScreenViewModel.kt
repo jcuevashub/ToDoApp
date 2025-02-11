@@ -5,9 +5,17 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.jacksoncuevas.todoapp.TodoApplication
 import com.jacksoncuevas.todoapp.data.FakeTaskLocalDataSource
+import com.jacksoncuevas.todoapp.domain.TaskLocalDataSource
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -16,9 +24,10 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
-class HomeScreenViewModel : ViewModel() {
-    private val taskLocalDataSource = FakeTaskLocalDataSource
+class HomeScreenViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val taskLocalDataSource: TaskLocalDataSource
+) : ViewModel() {
 
     var state by mutableStateOf(
         HomeDataState()
@@ -54,7 +63,7 @@ class HomeScreenViewModel : ViewModel() {
         viewModelScope.launch {
             when (action) {
                 HomeScreenAction.OnDeleteAllTasks -> {
-                    taskLocalDataSource.deleteAllTasks()
+                    taskLocalDataSource.removeAllTasks()
                     eventChannel.send(HomeScreenEvent.DeletedAllTasks)
                 }
 
@@ -70,6 +79,19 @@ class HomeScreenViewModel : ViewModel() {
 
                 else -> Unit
 
+            }
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val savedStateHandle = createSavedStateHandle()
+                val dataSource = (this[APPLICATION_KEY] as TodoApplication).dataSource
+                HomeScreenViewModel(
+                    taskLocalDataSource = dataSource,
+                    savedStateHandle = savedStateHandle
+                )
             }
         }
     }

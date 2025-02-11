@@ -51,8 +51,10 @@ import com.jacksoncuevas.todoapp.presentation.screens.detail.providers.TaskScree
 import com.jacksoncuevas.todoapp.ui.theme.AppTheme
 
 @Composable
-fun TaskScreenRoot(navigateBack: () -> Boolean) {
-    val viewModel = viewModel<TaskViewModel>()
+fun TaskScreenRoot(
+    navigateBack: () -> Boolean,
+    viewModel: TaskViewModel
+                   ) {
     val state = viewModel.state
     val event = viewModel.events
 

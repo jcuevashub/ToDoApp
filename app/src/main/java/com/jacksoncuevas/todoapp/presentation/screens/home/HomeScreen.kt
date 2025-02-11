@@ -49,10 +49,12 @@ import com.jacksoncuevas.todoapp.presentation.screens.home.componets.SectionTitl
 import com.jacksoncuevas.todoapp.presentation.screens.home.componets.SummaryInfo
 import com.jacksoncuevas.todoapp.presentation.screens.home.componets.TaskItem
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreenRoot(navigateToTaskScreen: (String?) -> Unit) {
-    val viewModel = viewModel<HomeScreenViewModel>()
+fun HomeScreenRoot(
+    navigateToTaskScreen: (String?) -> Unit,
+    viewModel: HomeScreenViewModel
+    ) {
+
     val state = viewModel.state
     val event = viewModel.event
 
