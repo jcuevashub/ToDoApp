@@ -2,9 +2,7 @@
 
 package com.jacksoncuevas.todoapp.presentation.screens.home
 
-import android.os.Build
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,13 +39,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.jacksoncuevas.todoapp.presentation.screens.home.providers.HomeScreenPreviewProvider
-import com.jacksoncuevas.todoapp.ui.theme.AppTheme
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jacksoncuevas.todoapp.R
 import com.jacksoncuevas.todoapp.presentation.screens.home.componets.SectionTitle
 import com.jacksoncuevas.todoapp.presentation.screens.home.componets.SummaryInfo
 import com.jacksoncuevas.todoapp.presentation.screens.home.componets.TaskItem
+import com.jacksoncuevas.todoapp.presentation.screens.home.providers.HomeScreenPreviewProvider
+import com.jacksoncuevas.todoapp.ui.theme.AppTheme
 
 @Composable
 fun HomeScreenRoot(

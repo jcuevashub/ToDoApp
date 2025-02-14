@@ -7,26 +7,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.toRoute
-import com.jacksoncuevas.todoapp.TodoApplication
-import com.jacksoncuevas.todoapp.data.FakeTaskLocalDataSource
 import com.jacksoncuevas.todoapp.domain.Task
 import com.jacksoncuevas.todoapp.domain.TaskLocalDataSource
 import com.jacksoncuevas.todoapp.navigation.TaskScreenDes
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
+import javax.inject.Inject
 
-class TaskViewModel(
+@HiltViewModel
+class TaskViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
    private val localDataSource: TaskLocalDataSource
 ) : ViewModel() {
@@ -105,18 +101,4 @@ class TaskViewModel(
             }
         }
     }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val savedStateHandle = createSavedStateHandle()
-                val dataSource = (this[APPLICATION_KEY] as TodoApplication).dataSource
-                TaskViewModel(
-                    localDataSource = dataSource,
-                    savedStateHandle = savedStateHandle
-                )
-            }
-        }
-    }
-
 }

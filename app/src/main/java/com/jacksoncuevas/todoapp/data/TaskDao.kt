@@ -3,7 +3,6 @@ package com.jacksoncuevas.todoapp.data
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.jacksoncuevas.todoapp.domain.Task
 import kotlinx.coroutines.flow.Flow
 
 @Dao

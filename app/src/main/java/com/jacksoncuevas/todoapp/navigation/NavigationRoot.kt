@@ -1,12 +1,10 @@
 package com.jacksoncuevas.todoapp.navigation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,28 +26,24 @@ fun NavigationRoot(
             startDestination = HomeScreenDes
         ) {
             composable<HomeScreenDes> {
-                val viewModel = viewModel<HomeScreenViewModel>(
-                    factory = HomeScreenViewModel.Factory
-                )
+                val homeScreenViewModel = hiltViewModel<HomeScreenViewModel>()
 
                 HomeScreenRoot(
                     navigateToTaskScreen = { taskId ->
                         navController.navigate(TaskScreenDes(taskId = taskId))
                     },
-                    viewModel = viewModel
+                    viewModel = homeScreenViewModel
                 )
             }
 
             composable<TaskScreenDes> {
-                val viewModel = viewModel<TaskViewModel>(
-                    factory = TaskViewModel.Factory
-                )
+                val taskViewModel = hiltViewModel<TaskViewModel>()
 
                 TaskScreenRoot(
                     navigateBack = {
                         navController.navigateUp()
                     },
-                    viewModel = viewModel
+                    viewModel = taskViewModel
                 )
             }
         }
