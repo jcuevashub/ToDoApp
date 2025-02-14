@@ -2,10 +2,9 @@
 
 **ToDoApp** is a simple yet powerful task management application built using **Jetpack Compose** for modern Android development. The app allows users to easily create, edit, and manage their tasks with a clean and intuitive interface.
 
-![image](https://github.com/user-attachments/assets/205b651b-74dd-41df-aea6-a1695aa7b707)
+<img src="https://github.com/user-attachments/assets/205b651b-74dd-41df-aea6-a1695aa7b707" alt="0" width="300">
 
-![image](https://github.com/user-attachments/assets/d386e29e-67a4-4ff3-a466-53d0117c33ac)
-
+<img src="https://github.com/user-attachments/assets/d386e29e-67a4-4ff3-a466-53d0117c33ac" alt="0" width="300">
 
 ## Features
 
