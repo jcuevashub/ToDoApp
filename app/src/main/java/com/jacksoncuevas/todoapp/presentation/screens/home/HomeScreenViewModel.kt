@@ -34,7 +34,7 @@ class HomeScreenViewModel @Inject constructor(
     init {
         state = state.copy(
             date = LocalDate.now().let {
-                DateTimeFormatter.ofPattern("EEEE, MMMM dd yyyy").format(it)
+                DateTimeFormatter.ofPattern("EEE, MMMM dd yyyy").format(it)
             }
         )
         taskLocalDataSource.taskFlow
@@ -69,6 +69,7 @@ class HomeScreenViewModel @Inject constructor(
                 is HomeScreenAction.OnToggleTask -> {
                     val updatedTask = action.task.copy(isCompleted = !action.task.isCompleted)
                     taskLocalDataSource.updateTask(updatedTask)
+                    eventChannel.send(HomeScreenEvent.UpdatedTasks)
                 }
 
                 else -> Unit

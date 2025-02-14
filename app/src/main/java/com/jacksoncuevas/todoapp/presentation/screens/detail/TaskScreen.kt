@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -52,15 +54,16 @@ import com.jacksoncuevas.todoapp.ui.theme.AppTheme
 @Composable
 fun TaskScreenRoot(
     navigateBack: () -> Boolean,
-    viewModel: TaskViewModel) {
+    viewModel: TaskViewModel
+) {
     val state = viewModel.state
     val event = viewModel.events
 
     val context = LocalContext.current
 
     LaunchedEffect(true) {
-        event.collect {event ->
-            when(event) {
+        event.collect { event ->
+            when (event) {
                 TaskEvent.TaskCreated -> {
                     Toast.makeText(
                         context,
@@ -74,13 +77,14 @@ fun TaskScreenRoot(
     }
     TaskScreen(
         state = state,
-        onActionTask = {action ->
-           when(action) {
-               is ActionTask.Back -> {
-                   navigateBack()
-               }
-               else -> viewModel.onAction(action)
-           }
+        onActionTask = { action ->
+            when (action) {
+                is ActionTask.Back -> {
+                    navigateBack()
+                }
+
+                else -> viewModel.onAction(action)
+            }
         }
     )
 }
@@ -125,6 +129,7 @@ fun TaskScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
+                .imePadding()
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -185,7 +190,7 @@ fun TaskScreen(
                             expanded = isExpanded,
                             onDismissRequest = { isExpanded = false },
 
-                        ) {
+                            ) {
                             Column {
                                 Category.entries.forEach { category ->
                                     Text(
@@ -232,8 +237,7 @@ fun TaskScreen(
                                     fontWeight = FontWeight.Bold
                                 )
                             )
-                        }
-                        else {
+                        } else {
                             innerTextField()
                         }
                     }
@@ -245,6 +249,15 @@ fun TaskScreen(
                 textStyle = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onSurface
                 ),
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.secondary),
+                lineLimits = if (isDescriptionFocused) {
+                    TextFieldLineLimits.MultiLine(
+                        minHeightInLines = 1,
+                        maxHeightInLines = 5
+                    )
+                } else {
+                    TextFieldLineLimits.Default
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
@@ -253,15 +266,16 @@ fun TaskScreen(
                     },
                 decorator = { innerTextField ->
                     Column {
-                        if (state.taskDescription.text.toString().isEmpty() && !isDescriptionFocused) {
+                        if (state.taskDescription.text.toString()
+                                .isEmpty() && !isDescriptionFocused
+                        ) {
                             Text(
                                 text = stringResource(R.string.task_description),
                                 color = MaterialTheme.colorScheme.onSurface.copy(
                                     alpha = 0.5f
                                 )
                             )
-                        }
-                        else {
+                        } else {
                             innerTextField()
                         }
                     }
@@ -279,7 +293,8 @@ fun TaskScreen(
                         ActionTask.SaveTask
                     )
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(46.dp)
             ) {
                 Text(

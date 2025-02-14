@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -31,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -65,9 +67,10 @@ fun HomeScreenRoot(
                 }
                 HomeScreenEvent.DeletedTask -> {
                     Toast.makeText(context, context.getString(R.string.task_deleted), Toast.LENGTH_SHORT)
-
                 }
-                HomeScreenEvent.UpdatedTasks -> TODO()
+                HomeScreenEvent.UpdatedTasks -> {
+                    Toast.makeText(context, context.getString(R.string.task_updated), Toast.LENGTH_SHORT)
+                }
             }
         }
     }
@@ -128,8 +131,8 @@ fun HomeScreen(
                         ) {
                             DropdownMenuItem(
                                 onClick = {
-                                    onAction(HomeScreenAction.OnDeleteAllTasks)
                                     isMenuExpanded = false
+                                    onAction(HomeScreenAction.OnDeleteAllTasks)
                                 },
                                 text = {
                                     Text(
@@ -158,88 +161,100 @@ fun HomeScreen(
         }
 
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            item {
-                SummaryInfo(
-                    date = state.date,
-                    taskSummary = state.summary,
-                    completedTask = state.completedTask.size,
-                    totalTask = state.completedTask.size + state.pendingTask.size
-                )
-            }
-
-            stickyHeader {
-                SectionTitle(
-                    modifier = Modifier
-                        .fillParentMaxWidth()
-                        .background(color = MaterialTheme.colorScheme.surface),
-                    title = stringResource(R.string.completed_taks)
-                )
-            }
-
-            items(
-                state.completedTask,
-                key = { task -> task.id }
-            ) { task ->
-                TaskItem(
-                    modifier = Modifier.clip(
-                        RoundedCornerShape(
-                            8.dp
-                        )
-                    ),
-                    task = task,
-                    onClickItem = {
-                        onAction(HomeScreenAction.OnClickTask(task.id))
-                    },
-                    onDeleteItem = {
-                        onAction(HomeScreenAction.OnDeleteTask(task))
-                    },
-                    onToggleCompletion = {
-                        onAction(HomeScreenAction.OnDeleteTask(task))
-                    }
+        if (state.completedTask.isEmpty() && state.pendingTask.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.no_task),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyLarge
                 )
 
             }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                item {
+                    SummaryInfo(
+                        date = state.date,
+                        taskSummary = state.summary,
+                        completedTask = state.completedTask.size,
+                        totalTask = state.completedTask.size + state.pendingTask.size
+                    )
+                }
 
-            stickyHeader {
-                SectionTitle(
-                    modifier = Modifier
-                        .fillParentMaxWidth()
-                        .background(color = MaterialTheme.colorScheme.surface),
-                    title = stringResource(R.string.pending_tasks)
-                )
+                stickyHeader {
+                    SectionTitle(
+                        modifier = Modifier
+                            .fillParentMaxWidth()
+                            .background(color = MaterialTheme.colorScheme.surface),
+                        title = stringResource(R.string.completed_taks)
+                    )
+                }
+
+                items(
+                    state.completedTask,
+                    key = { task -> task.id }
+                ) { task ->
+                    TaskItem(
+                        modifier = Modifier.clip(
+                            RoundedCornerShape(
+                                8.dp
+                            )
+                        ),
+                        task = task,
+                        onClickItem = {
+                            onAction(HomeScreenAction.OnClickTask(task.id))
+                        },
+                        onDeleteItem = {
+                            onAction(HomeScreenAction.OnDeleteTask(task))
+                        },
+                        onToggleCompletion = {
+                            onAction(HomeScreenAction.OnToggleTask(task))
+                        }
+                    )
+
+                }
+
+                stickyHeader {
+                    SectionTitle(
+                        modifier = Modifier
+                            .fillParentMaxWidth()
+                            .background(color = MaterialTheme.colorScheme.surface),
+                        title = stringResource(R.string.pending_tasks)
+                    )
+                }
+
+                items(
+                    state.pendingTask,
+                    key = { task -> task.id }
+                ) { task ->
+                    TaskItem(
+                        modifier = Modifier.clip(
+                            RoundedCornerShape(
+                                8.dp
+                            )
+                        ),
+                        task = task,
+                        onClickItem = {
+                            onAction(HomeScreenAction.OnClickTask(task.id))
+                        },
+                        onDeleteItem = {
+                            onAction(HomeScreenAction.OnDeleteTask(task))
+                        },
+                        onToggleCompletion = {
+                            onAction(HomeScreenAction.OnToggleTask(task))
+                        }
+                    )
+
+                }
             }
-
-            items(
-                state.pendingTask,
-                key = { task -> task.id }
-            ) { task ->
-                TaskItem(
-                    modifier = Modifier.clip(
-                        RoundedCornerShape(
-                            8.dp
-                        )
-                    ),
-                    task = task,
-                    onClickItem = {
-                        onAction(HomeScreenAction.OnClickTask(task.id))
-                    },
-                    onDeleteItem = {
-                        onAction(HomeScreenAction.OnDeleteTask(task))
-                    },
-                    onToggleCompletion = {
-                        onAction(HomeScreenAction.OnToggleTask(task))
-                    }
-                )
-
-            }
-
-
         }
     }
 }
